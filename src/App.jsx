@@ -19,7 +19,6 @@ import ReferencesList from './components/admin/ReferencesList';
 import ReferenceForm from './components/admin/ReferenceForm';
 import './App.css';
 
-// Wrapper component to handle auth redirects
 const AppRoutes = () => {
   const { isAuthenticated, loading } = useAuth();
 
@@ -29,86 +28,53 @@ const AppRoutes = () => {
 
   return (
     <Routes>
-      {/* Public Routes */}
       <Route path="/" element={<Home />} />
       <Route path="/portfolio" element={<Portfolio />} />
-      
-      {/* Auth Routes - Redirect if already logged in */}
       <Route path="/login" element={
         isAuthenticated ? <Navigate to="/admin" replace /> : <Login />
       } />
       <Route path="/register" element={
         isAuthenticated ? <Navigate to="/admin" replace /> : <Register />
       } />
-      
-      {/* Protected Admin Routes */}
       <Route path="/admin" element={
-        <ProtectedRoute>
-          <Dashboard />
-        </ProtectedRoute>
+        <ProtectedRoute><Dashboard /></ProtectedRoute>
       } />
       <Route path="/admin/users" element={
-        <ProtectedRoute>
-          <UsersList />
-        </ProtectedRoute>
+        <ProtectedRoute><UsersList /></ProtectedRoute>
       } />
       <Route path="/admin/users/new" element={
-        <ProtectedRoute>
-          <UserForm />
-        </ProtectedRoute>
+        <ProtectedRoute><UserForm /></ProtectedRoute>
       } />
       <Route path="/admin/users/edit/:id" element={
-        <ProtectedRoute>
-          <UserForm />
-        </ProtectedRoute>
+        <ProtectedRoute><UserForm /></ProtectedRoute>
       } />
       <Route path="/admin/projects" element={
-        <ProtectedRoute>
-          <ProjectsList />
-        </ProtectedRoute>
+        <ProtectedRoute><ProjectsList /></ProtectedRoute>
       } />
       <Route path="/admin/projects/new" element={
-        <ProtectedRoute>
-          <ProjectForm />
-        </ProtectedRoute>
+        <ProtectedRoute><ProjectForm /></ProtectedRoute>
       } />
       <Route path="/admin/projects/edit/:id" element={
-        <ProtectedRoute>
-          <ProjectForm />
-        </ProtectedRoute>
+        <ProtectedRoute><ProjectForm /></ProtectedRoute>
       } />
       <Route path="/admin/services" element={
-        <ProtectedRoute>
-          <ServicesList />
-        </ProtectedRoute>
+        <ProtectedRoute><ServicesList /></ProtectedRoute>
       } />
       <Route path="/admin/services/new" element={
-        <ProtectedRoute>
-          <ServiceForm />
-        </ProtectedRoute>
+        <ProtectedRoute><ServiceForm /></ProtectedRoute>
       } />
       <Route path="/admin/services/edit/:id" element={
-        <ProtectedRoute>
-          <ServiceForm />
-        </ProtectedRoute>
+        <ProtectedRoute><ServiceForm /></ProtectedRoute>
       } />
       <Route path="/admin/references" element={
-        <ProtectedRoute>
-          <ReferencesList />
-        </ProtectedRoute>
+        <ProtectedRoute><ReferencesList /></ProtectedRoute>
       } />
       <Route path="/admin/references/new" element={
-        <ProtectedRoute>
-          <ReferenceForm />
-        </ProtectedRoute>
+        <ProtectedRoute><ReferenceForm /></ProtectedRoute>
       } />
       <Route path="/admin/references/edit/:id" element={
-        <ProtectedRoute>
-          <ReferenceForm />
-        </ProtectedRoute>
+        <ProtectedRoute><ReferenceForm /></ProtectedRoute>
       } />
-      
-      {/* 404 - Redirect to home */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

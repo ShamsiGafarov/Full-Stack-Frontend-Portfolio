@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+// Use environment variable for API URL (important for Netlify)
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 
 const api = axios.create({
@@ -9,7 +10,7 @@ const api = axios.create({
   },
 });
 
-// Request interceptor - automatically adds token to every request
+// Request interceptor – adds token to every request
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -18,12 +19,10 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Response interceptor - handles unauthorized (401) responses
+// Response interceptor – handles 401 (unauthorized)
 api.interceptors.response.use(
   (response) => response,
   (error) => {
