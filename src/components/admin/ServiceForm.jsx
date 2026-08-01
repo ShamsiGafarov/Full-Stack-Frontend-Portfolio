@@ -43,6 +43,7 @@ const ServiceForm = () => {
     e.preventDefault();
     try {
       setLoading(true);
+      setError(null);
       if (isEditMode) {
         await serviceAPI.update(id, formData);
       } else {
@@ -50,7 +51,8 @@ const ServiceForm = () => {
       }
       navigate('/admin/services');
     } catch (err) {
-      setError('Failed to save service');
+      const message = err.response?.data?.message || 'Failed to save service';
+      setError(message);
       console.error(err);
     } finally {
       setLoading(false);
@@ -71,6 +73,7 @@ const ServiceForm = () => {
             value={formData.title}
             onChange={handleChange}
             required
+            placeholder="Enter service title"
           />
         </div>
         <div className="form-group">
@@ -81,6 +84,7 @@ const ServiceForm = () => {
             value={formData.description}
             onChange={handleChange}
             required
+            placeholder="Enter service description"
           />
         </div>
         <div className="form-group">
@@ -91,7 +95,7 @@ const ServiceForm = () => {
             name="icon"
             value={formData.icon}
             onChange={handleChange}
-            placeholder="e.g., fa-code"
+            placeholder="e.g., fa-code, fa-desktop"
           />
         </div>
         <div className="form-actions">

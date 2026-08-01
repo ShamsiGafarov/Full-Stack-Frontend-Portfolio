@@ -25,7 +25,7 @@ const ProjectsList = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure?')) {
+    if (window.confirm('Are you sure you want to delete this project?')) {
       try {
         await projectAPI.delete(id);
         setProjects(projects.filter(p => p._id !== id));
@@ -36,7 +36,7 @@ const ProjectsList = () => {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className="loading">Loading projects...</div>;
   if (error) return <div className="error">{error}</div>;
 
   return (
@@ -47,31 +47,39 @@ const ProjectsList = () => {
           Add New Project
         </Link>
       </div>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {projects.map((project) => (
-            <tr key={project._id}>
-              <td>{project.title}</td>
-              <td>{project.category}</td>
-              <td>
-                <Link to={`/admin/projects/edit/${project._id}`} className="btn btn-edit">
-                  Edit
-                </Link>
-                <button onClick={() => handleDelete(project._id)} className="btn btn-delete">
-                  Delete
-                </button>
-              </td>
+      {projects.length === 0 ? (
+        <p style={{ textAlign: 'center', color: '#666', padding: '2rem' }}>
+          No projects found.
+        </p>
+      ) : (
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Created</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {projects.map((project) => (
+              <tr key={project._id}>
+                <td>{project.title}</td>
+                <td>{project.category}</td>
+                <td>{new Date(project.createdAt).toLocaleDateString()}</td>
+                <td>
+                  <Link to={`/admin/projects/edit/${project._id}`} className="btn btn-edit">
+                    Edit
+                  </Link>
+                  <button onClick={() => handleDelete(project._id)} className="btn btn-delete">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };

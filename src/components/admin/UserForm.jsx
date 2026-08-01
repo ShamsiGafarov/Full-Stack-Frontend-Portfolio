@@ -8,7 +8,7 @@ const UserForm = () => {
   const isEditMode = !!id;
 
   const [formData, setFormData] = useState({
-    name: '',
+    username: '',        // Changed from 'name' to 'username'
     email: '',
     password: '',
     role: 'user',
@@ -27,9 +27,9 @@ const UserForm = () => {
       setLoading(true);
       const response = await userAPI.getById(id);
       setFormData({
-        name: response.data.name,
+        username: response.data.username || response.data.name || '',
         email: response.data.email,
-        password: '', // Don't populate password
+        password: '',
         role: response.data.role || 'user',
       });
     } catch (err) {
@@ -52,8 +52,9 @@ const UserForm = () => {
     e.preventDefault();
     try {
       setLoading(true);
+      setError(null);
+      
       if (isEditMode) {
-        // Remove password if empty in edit mode
         const updateData = { ...formData };
         if (!updateData.password) delete updateData.password;
         await userAPI.update(id, updateData);
@@ -62,8 +63,9 @@ const UserForm = () => {
       }
       navigate('/admin/users');
     } catch (err) {
-      setError('Failed to save user');
-      console.error(err);
+      const message = err.response?.data?.message || 'Failed to save user';
+      setError(message);
+      console.error('Save error:', err);
     } finally {
       setLoading(false);
     }
@@ -75,14 +77,15 @@ const UserForm = () => {
       {error && <div className="error">{error}</div>}
       <form onSubmit={handleSubmit} className="form">
         <div className="form-group">
-          <label htmlFor="name">Name</label>
+          <label htmlFor="username">Username</label>
           <input
             type="text"
-            id="name"
-            name="name"
-            value={formData.name}
+            id="username"
+            name="username"
+            value={formData.username}
             onChange={handleChange}
             required
+            placeholder="Enter username"
           />
         </div>
         <div className="form-group">
@@ -94,6 +97,7 @@ const UserForm = () => {
             value={formData.email}
             onChange={handleChange}
             required
+            placeholder="Enter email"
           />
         </div>
         <div className="form-group">
@@ -107,6 +111,7 @@ const UserForm = () => {
             value={formData.password}
             onChange={handleChange}
             required={!isEditMode}
+            placeholder={isEditMode ? 'New password' : 'Enter password'}
           />
         </div>
         <div className="form-group">

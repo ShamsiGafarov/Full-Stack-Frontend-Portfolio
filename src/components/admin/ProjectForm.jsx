@@ -46,6 +46,7 @@ const ProjectForm = () => {
     e.preventDefault();
     try {
       setLoading(true);
+      setError(null);
       if (isEditMode) {
         await projectAPI.update(id, formData);
       } else {
@@ -53,7 +54,8 @@ const ProjectForm = () => {
       }
       navigate('/admin/projects');
     } catch (err) {
-      setError('Failed to save project');
+      const message = err.response?.data?.message || 'Failed to save project';
+      setError(message);
       console.error(err);
     } finally {
       setLoading(false);
@@ -74,6 +76,7 @@ const ProjectForm = () => {
             value={formData.title}
             onChange={handleChange}
             required
+            placeholder="Enter project title"
           />
         </div>
         <div className="form-group">
@@ -84,6 +87,7 @@ const ProjectForm = () => {
             value={formData.description}
             onChange={handleChange}
             required
+            placeholder="Enter project description"
           />
         </div>
         <div className="form-group">
@@ -95,6 +99,7 @@ const ProjectForm = () => {
             value={formData.category}
             onChange={handleChange}
             required
+            placeholder="e.g., Web Development, Mobile App"
           />
         </div>
         <div className="form-group">
@@ -105,6 +110,7 @@ const ProjectForm = () => {
             name="imageUrl"
             value={formData.imageUrl}
             onChange={handleChange}
+            placeholder="https://example.com/image.jpg"
           />
         </div>
         <div className="form-group">
@@ -115,6 +121,7 @@ const ProjectForm = () => {
             name="liveUrl"
             value={formData.liveUrl}
             onChange={handleChange}
+            placeholder="https://example.com"
           />
         </div>
         <div className="form-group">
@@ -125,6 +132,7 @@ const ProjectForm = () => {
             name="githubUrl"
             value={formData.githubUrl}
             onChange={handleChange}
+            placeholder="https://github.com/username/repo"
           />
         </div>
         <div className="form-actions">

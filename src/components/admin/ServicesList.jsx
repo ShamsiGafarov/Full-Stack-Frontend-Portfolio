@@ -25,7 +25,7 @@ const ServicesList = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure?')) {
+    if (window.confirm('Are you sure you want to delete this service?')) {
       try {
         await serviceAPI.delete(id);
         setServices(services.filter(s => s._id !== id));
@@ -36,7 +36,7 @@ const ServicesList = () => {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className="loading">Loading services...</div>;
   if (error) return <div className="error">{error}</div>;
 
   return (
@@ -47,31 +47,39 @@ const ServicesList = () => {
           Add New Service
         </Link>
       </div>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {services.map((service) => (
-            <tr key={service._id}>
-              <td>{service.title}</td>
-              <td>{service.description}</td>
-              <td>
-                <Link to={`/admin/services/edit/${service._id}`} className="btn btn-edit">
-                  Edit
-                </Link>
-                <button onClick={() => handleDelete(service._id)} className="btn btn-delete">
-                  Delete
-                </button>
-              </td>
+      {services.length === 0 ? (
+        <p style={{ textAlign: 'center', color: '#666', padding: '2rem' }}>
+          No services found.
+        </p>
+      ) : (
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Icon</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {services.map((service) => (
+              <tr key={service._id}>
+                <td>{service.title}</td>
+                <td>{service.description}</td>
+                <td>{service.icon || '-'}</td>
+                <td>
+                  <Link to={`/admin/services/edit/${service._id}`} className="btn btn-edit">
+                    Edit
+                  </Link>
+                  <button onClick={() => handleDelete(service._id)} className="btn btn-delete">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };

@@ -1,10 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const Dashboard = () => {
+  const { user } = useAuth();
+
   return (
     <div className="dashboard">
       <h1>Admin Dashboard</h1>
+      <p style={{ color: '#666', marginBottom: '1rem' }}>
+        Welcome back, {user?.username || user?.name}
+      </p>
       <div className="dashboard-grid">
         <Link to="/admin/users" className="dashboard-card">
           <h3>Users</h3>

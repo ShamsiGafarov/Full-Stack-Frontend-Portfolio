@@ -37,7 +37,7 @@ const UsersList = () => {
     }
   };
 
-  if (loading) return <div className="loading">Loading...</div>;
+  if (loading) return <div className="loading">Loading users...</div>;
   if (error) return <div className="error">{error}</div>;
 
   return (
@@ -48,39 +48,57 @@ const UsersList = () => {
           Add New User
         </Link>
       </div>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user._id}>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td>{user.role || 'User'}</td>
-              <td>
-                <Link 
-                  to={`/admin/users/edit/${user._id}`} 
-                  className="btn btn-edit"
-                >
-                  Edit
-                </Link>
-                <button 
-                  onClick={() => handleDelete(user._id)} 
-                  className="btn btn-delete"
-                >
-                  Delete
-                </button>
-              </td>
+      {users.length === 0 ? (
+        <p style={{ textAlign: 'center', color: '#666', padding: '2rem' }}>
+          No users found.
+        </p>
+      ) : (
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Created</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user._id}>
+                <td>{user.username || user.name}</td>
+                <td>{user.email}</td>
+                <td>
+                  <span style={{
+                    background: user.role === 'admin' ? '#4a6cf7' : '#95a5a6',
+                    color: 'white',
+                    padding: '0.2rem 0.6rem',
+                    borderRadius: '4px',
+                    fontSize: '0.8rem'
+                  }}>
+                    {user.role || 'User'}
+                  </span>
+                </td>
+                <td>{new Date(user.createdAt).toLocaleDateString()}</td>
+                <td>
+                  <Link 
+                    to={`/admin/users/edit/${user._id}`} 
+                    className="btn btn-edit"
+                  >
+                    Edit
+                  </Link>
+                  <button 
+                    onClick={() => handleDelete(user._id)} 
+                    className="btn btn-delete"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };
